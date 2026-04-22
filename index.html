@@ -84,10 +84,25 @@
 <!-- QR SECTION -->
 <div class="qr-box" id="qrBox">
   <h3>Scan QR to Pay</h3>
+
   <p id="payText"></p>
-  <img src="https://raw.githubusercontent.com/satyabatihotel-code/payment-page/refs/heads/main/qr.jpeg">
-  <br>
-  <button onclick="sendWhatsApp()">Confirm Payment</button>
+
+  <!-- INSTRUCTIONS -->
+  <p style="color:red; font-weight:bold;">
+    ⚠️ Pay first, then click Confirm Payment
+  </p>
+
+  <p><b>Step 1:</b> Open PhonePe / GPay</p>
+  <p><b>Step 2:</b> Tap Scan</p>
+  <p><b>Step 3:</b> Scan this QR</p>
+  <p><b>Step 4:</b> Pay and click Confirm</p>
+
+  <!-- QR IMAGE -->
+  <img src="https://raw.githubusercontent.com/satyabatihotel-code/payment-page/main/qr.jpeg">
+
+  <br><br>
+
+  <button onclick="sendWhatsApp()">✅ I Have Paid</button>
 </div>
 
 <script>
@@ -127,7 +142,10 @@ function showQR(){
   }
 
   document.getElementById("qrBox").style.display = "block";
-  document.getElementById("payText").innerText = "Pay ₹" + total + " using PhonePe / GPay";
+  document.getElementById("payText").innerText = "Pay ₹" + total;
+
+  // AUTO SCROLL
+  document.getElementById("qrBox").scrollIntoView({ behavior: "smooth" });
 }
 
 function sendWhatsApp(){
