@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Satyabati Hindu Hotel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body { font-family: Arial; text-align: center; padding: 15px; }
+    h1 { font-size: 28px; font-weight: bold; }
+
+    .item {
+      border: 1px solid #ddd;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 8px;
+      font-size: 16px;
+    }
+
+    .pay {
+      background: green;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .qr-box {
+      display: none;
+      margin-top: 20px;
+    }
+
+    img {
+      width: 250px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🍽️ Satyabati Hindu Hotel</h1>
+
+<input type="text" id="name" placeholder="Enter your name"><br>
+<input type="number" id="phone" placeholder="Enter phone number"><br>
+
+<!-- PRODUCTS -->
+
+<div class="item">
+  <h3>Rice & Fish Curry (₹60)</h3>
+  <button onclick="changeQty(0,-1)">-</button>
+  <span id="q0">0</span>
+  <button onclick="changeQty(0,1)">+</button>
+</div>
+
+<div class="item">
+  <h3>Rice & Egg Curry (₹40)</h3>
+  <button onclick="changeQty(1,-1)">-</button>
+  <span id="q1">0</span>
+  <button onclick="changeQty(1,1)">+</button>
+</div>
+
+<div class="item">
+  <h3>Rice & Veg Curry (₹30)</h3>
+  <button onclick="changeQty(2,-1)">-</button>
+  <span id="q2">0</span>
+  <button onclick="changeQty(2,1)">+</button>
+</div>
+
+<h2>Total: ₹<span id="total">0</span></h2>
+
+<button class="pay" onclick="showQR()">Pay & Order</button>
+
+<!-- QR SECTION -->
+<div class="qr-box" id="qrBox">
+  <h3>Scan QR to Pay</h3>
+  <p id="payText"></p>
+  <img src="qr.jpeg">
+  <br>
+  <button onclick="sendWhatsApp()">Confirm Payment</button>
+</div>
+
+<script>
+
+let products = [
+  {name: "Rice & Fish Curry", price: 60, qty: 0},
+  {name: "Rice & Egg Curry", price: 40, qty: 0},
+  {name: "Rice & Veg Curry", price: 30, qty: 0}
+];
+
+function changeQty(i, val){
+  products[i].qty += val;
+  if(products[i].qty < 0) products[i].qty = 0;
+  document.getElementById("q"+i).innerText = products[i].qty;
+  updateTotal();
+}
+
+function updateTotal(){
+  let total = 0;
+  products.forEach(p => total += p.price * p.qty);
+  document.getElementById("total").innerText = total;
+}
+
+function showQR(){
+
+  let total = 0;
+
+  products.forEach(p => {
+    if(p.qty > 0){
+      total += p.price * p.qty;
+    }
+  });
+
+  if(total == 0){
+    alert("Please select items");
+    return;
+  }
+
+  document.getElementById("qrBox").style.display = "block";
+  document.getElementById("payText").innerText = "Pay ₹" + total + " using PhonePe / GPay";
+}
+
+function sendWhatsApp(){
+
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+
+  if(name == "" || phone == ""){
+    alert("Enter name and phone");
+    return;
+  }
+
+  let total = 0;
+  let orderText = "";
+
+  products.forEach(p => {
+    if(p.qty > 0){
+      total += p.price * p.qty;
+      orderText += p.name + " x " + p.qty + "%0A";
+    }
+  });
+
+  let msg = "Payment Done%0A"
+          + "Name: " + name + "%0A"
+          + "Phone: " + phone + "%0A"
+          + orderText
+          + "Total Paid: ₹" + total;
+
+  window.open("https://wa.me/919836697502?text=" + msg);
+}
+
+</script>
+
+</body>
+</html>
