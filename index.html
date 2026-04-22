@@ -5,176 +5,229 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    body { font-family: Arial; text-align: center; padding: 15px; }
-    h1 { font-size: 28px; font-weight: bold; }
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f1f3f4;
+      text-align: center;
+    }
 
-    .item {
-      border: 1px solid #ddd;
+    header {
+      background: #34a853;
+      color: white;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
       margin: 10px;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .btn-main {
+      background: #34a853;
+      color: white;
+      font-weight: bold;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .total-box {
+      font-size: 26px;
+      font-weight: bold;
+      color: #34a853;
+      background: #e6f4ea;
       padding: 10px;
       border-radius: 10px;
     }
 
-    button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
-    }
-
-    input {
-      padding: 10px;
-      width: 80%;
-      margin: 8px;
-      font-size: 16px;
-    }
-
-    .pay {
-      background: green;
-      color: white;
-      border: none;
-      border-radius: 8px;
-    }
-
-    .qr-box {
-      display: none;
-      margin-top: 20px;
-    }
+    .hidden { display: none; }
 
     img {
       width: 250px;
       margin-top: 10px;
+    }
+
+    .success {
+      color: green;
+      font-size: 22px;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-<h1>🍽️ Satyabati Hindu Hotel</h1>
+<header>🍽️ Satyabati Hindu Hotel</header>
 
-<input type="text" id="name" placeholder="Enter your name"><br>
-<input type="number" id="phone" placeholder="Enter phone number"><br>
+<div class="container">
 
-<!-- PRODUCTS -->
+  <input id="name" placeholder="Enter Name">
+  <input id="phone" placeholder="Phone Number">
 
-<div class="item">
-  <h3>Rice & Fish Curry (₹60)</h3>
-  <button onclick="changeQty(0,-1)">-</button>
-  <span id="q0">0</span>
-  <button onclick="changeQty(0,1)">+</button>
-</div>
+  <!-- ITEMS -->
+  <div class="card">
+    Rice & Fish Curry ₹60 <br>
+    <button onclick="qty(0,-1)">-</button>
+    <span id="q0">0</span>
+    <button onclick="qty(0,1)">+</button>
+  </div>
 
-<div class="item">
-  <h3>Rice & Egg Curry (₹40)</h3>
-  <button onclick="changeQty(1,-1)">-</button>
-  <span id="q1">0</span>
-  <button onclick="changeQty(1,1)">+</button>
-</div>
+  <div class="card">
+    Rice & Egg Curry ₹40 <br>
+    <button onclick="qty(1,-1)">-</button>
+    <span id="q1">0</span>
+    <button onclick="qty(1,1)">+</button>
+  </div>
 
-<div class="item">
-  <h3>Rice & Veg Curry (₹30)</h3>
-  <button onclick="changeQty(2,-1)">-</button>
-  <span id="q2">0</span>
-  <button onclick="changeQty(2,1)">+</button>
-</div>
+  <div class="card">
+    Rice & Veg Curry ₹30 <br>
+    <button onclick="qty(2,-1)">-</button>
+    <span id="q2">0</span>
+    <button onclick="qty(2,1)">+</button>
+  </div>
 
-<h2>Total: ₹<span id="total">0</span></h2>
+  <div class="total-box">
+    Total: ₹ <span id="total">0</span>
+  </div>
 
-<button class="pay" onclick="showQR()">Pay & Order</button>
+  <br>
+  <button class="btn-main" onclick="showQR()">Pay & Order</button>
 
-<!-- QR SECTION -->
-<div class="qr-box" id="qrBox">
-  <h3>Scan QR to Pay</h3>
+  <!-- QR SECTION -->
+  <div id="qrBox" class="card hidden">
 
-  <p id="payText"></p>
+    <h3>Pay ₹ <span id="payAmount"></span></h3>
 
-  <!-- INSTRUCTIONS -->
-  <p style="color:red; font-weight:bold;">
-    ⚠️ Pay first, then click Confirm Payment
-  </p>
+    <p style="color:red;"><b>Pay first, then click confirm</b></p>
 
-  <p><b>Step 1:</b> Open PhonePe / GPay</p>
-  <p><b>Step 2:</b> Tap Scan</p>
-  <p><b>Step 3:</b> Scan this QR</p>
-  <p><b>Step 4:</b> Pay and click Confirm</p>
+    <img src="https://raw.githubusercontent.com/satyabatihotel-code/payment-page/main/qr.jpeg">
 
-  <!-- QR IMAGE -->
-  <img src="https://raw.githubusercontent.com/satyabatihotel-code/payment-page/main/qr.jpeg">
+    <br><br>
 
-  <br><br>
+    <button onclick="downloadQR()">⬇ Download QR</button>
 
-  <button onclick="sendWhatsApp()">✅ I Have Paid</button>
+    <br><br>
+
+    <button class="btn-main" onclick="confirmPayment()">✅ I Have Paid</button>
+
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div id="successBox" class="card hidden">
+
+    <div class="success">✅ Payment Successful</div>
+
+    <p>Order ID: <b id="orderId"></b></p>
+
+    <h3>Receipt</h3>
+    <div id="receipt"></div>
+
+    <br>
+
+    <button onclick="sendWhatsApp()">📩 Send Order on WhatsApp</button>
+
+  </div>
+
 </div>
 
 <script>
 
 let products = [
-  {name: "Rice & Fish Curry", price: 60, qty: 0},
-  {name: "Rice & Egg Curry", price: 40, qty: 0},
-  {name: "Rice & Veg Curry", price: 30, qty: 0}
+  {name:"Fish Curry",price:60,qty:0},
+  {name:"Egg Curry",price:40,qty:0},
+  {name:"Veg Curry",price:30,qty:0}
 ];
 
-function changeQty(i, val){
-  products[i].qty += val;
-  if(products[i].qty < 0) products[i].qty = 0;
-  document.getElementById("q"+i).innerText = products[i].qty;
-  updateTotal();
+function qty(i,v){
+  products[i].qty += v;
+  if(products[i].qty<0) products[i].qty=0;
+  document.getElementById("q"+i).innerText=products[i].qty;
+  total();
 }
 
-function updateTotal(){
-  let total = 0;
-  products.forEach(p => total += p.price * p.qty);
-  document.getElementById("total").innerText = total;
+function total(){
+  let t=0;
+  products.forEach(p=>t+=p.price*p.qty);
+  document.getElementById("total").innerText=t;
 }
 
 function showQR(){
+  let t=document.getElementById("total").innerText;
+  if(t==0){alert("Select item");return;}
+  document.getElementById("payAmount").innerText=t;
+  document.getElementById("qrBox").classList.remove("hidden");
+}
 
-  let total = 0;
+function downloadQR(){
+  let a=document.createElement('a');
+  a.href="https://raw.githubusercontent.com/satyabatihotel-code/payment-page/main/qr.jpeg";
+  a.download="qr.jpeg";
+  a.click();
+}
 
-  products.forEach(p => {
-    if(p.qty > 0){
-      total += p.price * p.qty;
+function confirmPayment(){
+
+  let id="ORD"+Math.floor(Math.random()*100000);
+  document.getElementById("orderId").innerText=id;
+
+  let rec="";
+  let t=0;
+
+  products.forEach(p=>{
+    if(p.qty>0){
+      rec+=p.name+" x "+p.qty+"<br>";
+      t+=p.price*p.qty;
     }
   });
 
-  if(total == 0){
-    alert("Please select items");
-    return;
-  }
+  rec+="<br><b>Total Paid: ₹"+t+"</b>";
+  document.getElementById("receipt").innerHTML=rec;
 
-  document.getElementById("qrBox").style.display = "block";
-  document.getElementById("payText").innerText = "Pay ₹" + total;
-
-  // AUTO SCROLL
-  document.getElementById("qrBox").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("qrBox").classList.add("hidden");
+  document.getElementById("successBox").classList.remove("hidden");
 }
 
 function sendWhatsApp(){
 
-  let name = document.getElementById("name").value;
-  let phone = document.getElementById("phone").value;
+  let name=document.getElementById("name").value;
+  let phone=document.getElementById("phone").value;
 
-  if(name == "" || phone == ""){
-    alert("Enter name and phone");
-    return;
-  }
+  let msg="Order Confirmed%0A";
+  msg+="Name: "+name+"%0A";
+  msg+="Phone: "+phone+"%0A";
 
-  let total = 0;
-  let orderText = "";
-
-  products.forEach(p => {
-    if(p.qty > 0){
-      total += p.price * p.qty;
-      orderText += p.name + " x " + p.qty + "%0A";
+  products.forEach(p=>{
+    if(p.qty>0){
+      msg+=p.name+" x "+p.qty+"%0A";
     }
   });
 
-  let msg = "Payment Done%0A"
-          + "Name: " + name + "%0A"
-          + "Phone: " + phone + "%0A"
-          + orderText
-          + "Total Paid: ₹" + total;
+  msg+="Check payment done";
 
-  window.open("https://wa.me/919836697502?text=" + msg);
+  window.open("https://wa.me/919836697502?text="+msg);
 }
 
 </script>
